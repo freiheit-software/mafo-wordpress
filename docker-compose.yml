@@ -10,13 +10,10 @@ services:
     volumes:
       - ./src:/var/www/html
       - ./apache2/apache2.conf:/etc/apache2/apache2.conf
-        #- ./apache2/conf-available:/etc/apache2/conf-available
-        #- ./apaeche2/conf-enabled:/etc/apache2/conf-enabled
-        #- ./apache2/mods-enabled:/etc/apache2/mods-enabled
       - ./apache2/sites-available:/etc/apache2/sites-available
       - ./apache2/sites-enabled:/etc/apache2/sites-enabled
     ports:
-      - "8800:80"
+      - "9080:80"
     depends_on:
       - mysql
 
@@ -30,4 +27,9 @@ services:
       - ./database/data:/var/lib/mysql
       - ./database/initdb.d:/docker-entrypoint-initdb.d
     ports:
-      - "3306:3306"
+      - "9306:3306"
+
+  adminer:
+    image: adminer:4.7-standalone
+    ports:
+      - "8080:8080"
