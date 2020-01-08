@@ -1,0 +1,33 @@
+version: '3'
+
+services:
+  wordpress:
+    image: freiheitsoftware/mannheim_forum-wordpress_apache:latest
+    build:
+      context: apache2
+    container_name: mannheim_forum-wordpress
+    restart: always
+    volumes:
+      - ./src:/var/www/html
+      - ./apache2/apache2.conf:/etc/apache2/apache2.conf
+        #- ./apache2/conf-available:/etc/apache2/conf-available
+        #- ./apaeche2/conf-enabled:/etc/apache2/conf-enabled
+        #- ./apache2/mods-enabled:/etc/apache2/mods-enabled
+      - ./apache2/sites-available:/etc/apache2/sites-available
+      - ./apache2/sites-enabled:/etc/apache2/sites-enabled
+    ports:
+      - "8800:80"
+    depends_on:
+      - mysql
+
+  mysql:
+    image: mysql:5.7
+    container_name: mannheim_forum-mysql
+    restart: always
+    env_file:
+      - .mysql.env
+    volumes:
+      - ./database/data:/var/lib/mysql
+      - ./database/initdb.d:/docker-entrypoint-initdb.d
+    ports:
+      - "3306:3306"
